@@ -1,5 +1,19 @@
 import requests
 import datetime
+import os
+
+siglas_moedas = {
+    'DKK': 'Coroa Dinamarquesa',
+    'NOK': 'Coroa Norueguesa',
+    'SEK': 'Coroa Sueca',
+    'USD': 'Dólar Americano',
+    'AUD': 'Dólar Australiano',
+    'CAD': 'Dólar Canadense',
+    'EUR': 'Euro',
+    'CHF': 'Franco Suíço',
+    'JPY': 'Iene',
+    'GBP': 'Libra Esterlina'
+}
 
 def obter_cotacao(moeda):
     current_time = datetime.datetime.now()
@@ -18,10 +32,10 @@ def obter_cotacao(moeda):
 
 def converter_reais_para_moeda(valorReais, cotacao, moeda_escolhida):
     try:
+        os.system('cls' if os.name == 'nt' else 'clear')
         valor_em_reais = float(input(f"Digite a quantia em reais que você deseja converter para {moeda_escolhida} ({siglas_moedas[moeda_escolhida]}): "))
         valor_convertido = valor_em_reais / cotacao
         print(f"{valor_em_reais:.2f} reais equivalem a {valor_convertido:.2f} {moeda_escolhida}.")
-        input("Pressione Enter para voltar ao menu principal.")
     except ValueError:
         print("Por favor, insira um valor válido em reais.")
     except Exception as e:
@@ -42,6 +56,8 @@ def escolher_moeda():
         '10': 'GBP',
     }
 
+    os.system('cls' if os.name == 'nt' else 'clear')
+
     print("Escolha a moeda para conversão:")
     for opcao, descricao in moedas_disponiveis.items():
         if opcao != '0':
@@ -61,12 +77,13 @@ def escolher_moeda():
         return escolher_moeda()
 
 def Operacao2():
+    os.system('cls' if os.name == 'nt' else 'clear')
     print("Função ainda não disponível.")
-    input("Pressione Enter para voltar ao menu principal.")
 
 def main():
     while True:
-        print("\nBem-vindo ao Conversor de Moedas!")
+        os.system('cls' if os.name == 'nt' else 'clear')
+        print("\nBem-vindo ao Finance!")
         print("Escolha uma opção:")
         print("1. Converter reais para moeda estrangeira")
         print("2. Função em andamento (WIP)")
@@ -90,18 +107,7 @@ def main():
         else:
             print("Opção inválida. Escolha uma opção válida.")
 
-siglas_moedas = {
-    'DKK': 'Coroa Dinamarquesa',
-    'NOK': 'Coroa Norueguesa',
-    'SEK': 'Coroa Sueca',
-    'USD': 'Dólar Americano',
-    'AUD': 'Dólar Australiano',
-    'CAD': 'Dólar Canadense',
-    'EUR': 'Euro',
-    'CHF': 'Franco Suíço',
-    'JPY': 'Iene',
-    'GBP': 'Libra Esterlina'
-}
+        input("Pressione Enter para continuar...")
 
 if __name__ == "__main__":
     main()
