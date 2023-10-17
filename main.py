@@ -32,7 +32,7 @@ def obter_cotacao(moeda):
 
 def converter_reais_para_moeda(valorReais, cotacao, moeda_escolhida):
     try:
-        os.system('cls' if os.name == 'nt' else 'clear')
+        os.system('cls' if os.name == 'nt' else 'clear')  # Limpar terminal
         valor_em_reais = float(input(f"Digite a quantia em reais que você deseja converter para {moeda_escolhida} ({siglas_moedas[moeda_escolhida]}): "))
         valor_convertido = valor_em_reais / cotacao
         print(f"{valor_em_reais:.2f} reais equivalem a {valor_convertido:.2f} {moeda_escolhida}.")
@@ -56,7 +56,7 @@ def escolher_moeda():
         '10': 'GBP',
     }
 
-    os.system('cls' if os.name == 'nt' else 'clear')
+    os.system('cls' if os.name == 'nt' else 'clear')  # Limpar terminal
 
     print("Escolha a moeda para conversão:")
     for opcao, descricao in moedas_disponiveis.items():
@@ -76,17 +76,28 @@ def escolher_moeda():
         print("Opção inválida. Escolha uma opção válida.")
         return escolher_moeda()
 
-def Operacao2():
-    os.system('cls' if os.name == 'nt' else 'clear')
-    print("Função ainda não disponível.")
+def calcular_juros():
+    try:
+        os.system('cls' if os.name == 'nt' else 'clear')  # Limpar terminal
+        montante = float(input("Digite o montante do empréstimo: "))
+        tempo_meses = int(input("Digite o tempo em meses: "))
+        taxa_mensal = float(input("Digite a taxa de juros ao mês (em porcentagem): ")) / 100
+
+        montante_final = montante * (1 + taxa_mensal) ** tempo_meses
+
+        print(f"\nMontante final a ser pago: {montante_final:.2f}")
+    except ValueError:
+        print("Por favor, insira valores válidos.")
+    except Exception as e:
+        print(f"Erro: {e}")
 
 def main():
     while True:
-        os.system('cls' if os.name == 'nt' else 'clear')
+        os.system('cls' if os.name == 'nt' else 'clear')  # Limpar terminal
         print("\nBem-vindo ao Finance!")
         print("Escolha uma opção:")
         print("1. Converter reais para moeda estrangeira")
-        print("2. Função em andamento (WIP)")
+        print("2. Calculadora de Juros")
         print("3. Sair")
 
         opcao = input("Digite o número da opção desejada: ")
@@ -98,7 +109,7 @@ def main():
                 converter_reais_para_moeda(0, cotacao_atual, moeda_escolhida)
 
         elif opcao == '2':
-            Operacao2()
+            calcular_juros()
 
         elif opcao == '3':
             print("Saindo do programa. Até mais!")
@@ -107,7 +118,8 @@ def main():
         else:
             print("Opção inválida. Escolha uma opção válida.")
 
-        input("Pressione Enter para continuar...")
+        if opcao in ['1', '2']:
+            input("Pressione Enter para continuar...")  # Espera por um input para continuar
 
 if __name__ == "__main__":
     main()
