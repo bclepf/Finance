@@ -36,7 +36,7 @@ def obter_cotacao(moeda):
 
 def converter_reais_para_moeda(valor_reais, cotacao, moeda_escolhida):
     try:
-        os.system('cls' if os.name == 'nt' else 'clear')  # Limpar terminal
+        os.system('cls' if os.name == 'nt' else 'clear')
 
         print(f"\n{'=' * 80}")
         print(f"{'Calculadora de Conversão de Moeda':^80}")
@@ -71,7 +71,7 @@ def escolher_moeda():
         '10': 'GBP',
     }
 
-    os.system('cls' if os.name == 'nt' else 'clear')  # Limpar terminal
+    os.system('cls' if os.name == 'nt' else 'clear')
 
     print(f"\n{'=' * 80}")
     print(f"{'Escolha a Moeda para Conversão':^80}")
@@ -96,7 +96,7 @@ def escolher_moeda():
 
 def calcular_juros():
     try:
-        os.system('cls' if os.name == 'nt' else 'clear')  # Limpar terminal
+        os.system('cls' if os.name == 'nt' else 'clear')
 
         print(f"\n{'=' * 80}")
         print(f"{'Calculadora de Juros':^80}")
@@ -118,7 +118,7 @@ def calcular_juros():
 
 def main():
     while True:
-        os.system('cls' if os.name == 'nt' else 'clear')  # Limpar terminal
+        os.system('cls' if os.name == 'nt' else 'clear')
 
         print(f"\n{'=' * 80}")
         print(f"{'Bem-vindo ao Finance!':^80}")
@@ -148,7 +148,7 @@ def main():
             print(f"{Cor.VERDE}Opção inválida. Escolha uma opção válida.{Cor.RESET}")
 
         if opcao in ['1', '2']:
-            input("Pressione Enter para continuar...")  # Espera por um input para continuar
+            input("Pressione Enter para continuar...")
 
 if __name__ == "__main__":
     main()
