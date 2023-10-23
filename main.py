@@ -1,9 +1,12 @@
 import requests
 import datetime
 import os
-import shutil
 
-siglas_moedas = {
+class Cor:
+    VERDE = '\033[92m'
+    RESET = '\033[0m'
+
+SIGLAS_MOEDAS = {
     'DKK': 'Coroa Dinamarquesa',
     'NOK': 'Coroa Norueguesa',
     'SEK': 'Coroa Sueca',
@@ -15,10 +18,6 @@ siglas_moedas = {
     'JPY': 'Iene',
     'GBP': 'Libra Esterlina'
 }
-
-class Cor:
-    VERDE = '\033[92m'
-    RESET = '\033[0m'
 
 def obter_cotacao(moeda):
     current_time = datetime.datetime.now()
@@ -35,22 +34,22 @@ def obter_cotacao(moeda):
 
     return first_cotacao_compra
 
-def converter_reais_para_moeda(valorReais, cotacao, moeda_escolhida):
+def converter_reais_para_moeda(valor_reais, cotacao, moeda_escolhida):
     try:
         os.system('cls' if os.name == 'nt' else 'clear')  # Limpar terminal
 
-        print(f"\n{'=' * shutil.get_terminal_size().columns}")
-        print(f"{'Calculadora de Conversão de Moeda':^{shutil.get_terminal_size().columns}}")
-        print(f"{'=' * shutil.get_terminal_size().columns}\n")
+        print(f"\n{'=' * 80}")
+        print(f"{'Calculadora de Conversão de Moeda':^80}")
+        print(f"{'=' * 80}\n")
 
-        valor_em_reais = float(input(f"Digite a quantia em reais que você deseja converter para {moeda_escolhida} ({siglas_moedas[moeda_escolhida]}): "))
+        valor_em_reais = float(input(f"Digite a quantia em reais que você deseja converter para {moeda_escolhida} ({SIGLAS_MOEDAS[moeda_escolhida]}): "))
         valor_convertido = valor_em_reais / cotacao
 
-        print(f"\n{'=' * shutil.get_terminal_size().columns}")
+        print(f"\n{'=' * 80}")
         print("Resultado da Conversão:")
         print(f"Valor em Reais: {valor_em_reais:.2f} BRL")
         print(f"Valor Convertido: {valor_convertido:.2f} {moeda_escolhida}")
-        print(f"{'=' * shutil.get_terminal_size().columns}\n")
+        print(f"{'=' * 80}\n")
 
     except ValueError:
         print(f"{Cor.VERDE}Erro:{Cor.RESET} Por favor, insira um valor válido em reais.")
@@ -74,15 +73,15 @@ def escolher_moeda():
 
     os.system('cls' if os.name == 'nt' else 'clear')  # Limpar terminal
 
-    print(f"\n{'=' * shutil.get_terminal_size().columns}")
-    print(f"{'Escolha a Moeda para Conversão':^{shutil.get_terminal_size().columns}}")
-    print(f"{'=' * shutil.get_terminal_size().columns}\n")
+    print(f"\n{'=' * 80}")
+    print(f"{'Escolha a Moeda para Conversão':^80}")
+    print(f"{'=' * 80}\n")
 
     for opcao, descricao in moedas_disponiveis.items():
         if opcao != '0':
-            print(f"{' ' * (shutil.get_terminal_size().columns - len(descricao))}[{opcao}]: {descricao} ({siglas_moedas[descricao]})")
+            print(f"{' ' * 1}[{opcao}]: {descricao} ({SIGLAS_MOEDAS[descricao]})")
         else:
-            print(f"{' ' * (shutil.get_terminal_size().columns - len(descricao))}[{opcao}]: {descricao}")
+            print(f"{' ' * 1}[{opcao}]: {descricao}{' ' * (56 - len(descricao))}")
 
     escolha = input("\nDigite o número da opção desejada: ")
 
@@ -99,9 +98,9 @@ def calcular_juros():
     try:
         os.system('cls' if os.name == 'nt' else 'clear')  # Limpar terminal
 
-        print(f"\n{'=' * shutil.get_terminal_size().columns}")
-        print(f"{'Calculadora de Juros':^{shutil.get_terminal_size().columns}}")
-        print(f"{'=' * shutil.get_terminal_size().columns}\n")
+        print(f"\n{'=' * 80}")
+        print(f"{'Calculadora de Juros':^80}")
+        print(f"{'=' * 80}\n")
 
         montante = float(input("Digite o montante do empréstimo: "))
         tempo_meses = int(input("Digite o tempo em meses: "))
@@ -110,7 +109,7 @@ def calcular_juros():
         montante_final = montante * (1 + taxa_mensal) ** tempo_meses
 
         print(f"\nMontante final a ser pago: {montante_final:.2f}")
-        print(f"{'=' * shutil.get_terminal_size().columns}\n")
+        print(f"{'=' * 80}\n")
 
     except ValueError:
         print(f"{Cor.VERDE}Erro:{Cor.RESET} Por favor, insira valores válidos.")
@@ -121,13 +120,14 @@ def main():
     while True:
         os.system('cls' if os.name == 'nt' else 'clear')  # Limpar terminal
 
-        print(f"\n{'=' * shutil.get_terminal_size().columns}")
-        print(f"{'Bem-vindo ao Finance!':^{shutil.get_terminal_size().columns}}")
-        print(f"{'=' * shutil.get_terminal_size().columns}\n")
+        print(f"\n{'=' * 80}")
+        print(f"{'Bem-vindo ao Finance!':^80}")
+        print(f"{'=' * 80}\n")
 
-        print(f"{' ' * 32}[1]: Converter reais para moeda estrangeira{' ' * 15}")
-        print(f"{' ' * 32}[2]: Calculadora de Juros{' ' * 37}")
-        print(f"{' ' * 32}[3]: Sair{' ' * (shutil.get_terminal_size().columns - 49)}")
+        print("Escolha uma opção:")
+        print(f"{' ' * 1}[1]: Converter reais para moeda estrangeira{' ' * 15}")
+        print(f"{' ' * 1}[2]: Calculadora de Juros{' ' * 38}")
+        print(f"{' ' * 1}[3]: Sair{' ' * 65}")
 
         opcao = input("\nDigite o número da opção desejada: ")
 
