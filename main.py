@@ -1,6 +1,7 @@
 import requests
 import datetime
 import os
+import shutil
 
 siglas_moedas = {
     'DKK': 'Coroa Dinamarquesa',
@@ -14,6 +15,10 @@ siglas_moedas = {
     'JPY': 'Iene',
     'GBP': 'Libra Esterlina'
 }
+
+class Cor:
+    VERDE = '\033[92m'
+    RESET = '\033[0m'
 
 def obter_cotacao(moeda):
     current_time = datetime.datetime.now()
@@ -33,13 +38,24 @@ def obter_cotacao(moeda):
 def converter_reais_para_moeda(valorReais, cotacao, moeda_escolhida):
     try:
         os.system('cls' if os.name == 'nt' else 'clear')  # Limpar terminal
+
+        print(f"\n{'=' * shutil.get_terminal_size().columns}")
+        print(f"{'Calculadora de Conversão de Moeda':^{shutil.get_terminal_size().columns}}")
+        print(f"{'=' * shutil.get_terminal_size().columns}\n")
+
         valor_em_reais = float(input(f"Digite a quantia em reais que você deseja converter para {moeda_escolhida} ({siglas_moedas[moeda_escolhida]}): "))
         valor_convertido = valor_em_reais / cotacao
-        print(f"{valor_em_reais:.2f} reais equivalem a {valor_convertido:.2f} {moeda_escolhida}.")
+
+        print(f"\n{'=' * shutil.get_terminal_size().columns}")
+        print("Resultado da Conversão:")
+        print(f"Valor em Reais: {valor_em_reais:.2f} BRL")
+        print(f"Valor Convertido: {valor_convertido:.2f} {moeda_escolhida}")
+        print(f"{'=' * shutil.get_terminal_size().columns}\n")
+
     except ValueError:
-        print("Por favor, insira um valor válido em reais.")
+        print(f"{Cor.VERDE}Erro:{Cor.RESET} Por favor, insira um valor válido em reais.")
     except Exception as e:
-        print(f"Erro: {e}")
+        print(f"{Cor.VERDE}Erro:{Cor.RESET} {e}")
 
 def escolher_moeda():
     moedas_disponiveis = {
@@ -58,14 +74,17 @@ def escolher_moeda():
 
     os.system('cls' if os.name == 'nt' else 'clear')  # Limpar terminal
 
-    print("Escolha a moeda para conversão:")
+    print(f"\n{'=' * shutil.get_terminal_size().columns}")
+    print(f"{'Escolha a Moeda para Conversão':^{shutil.get_terminal_size().columns}}")
+    print(f"{'=' * shutil.get_terminal_size().columns}\n")
+
     for opcao, descricao in moedas_disponiveis.items():
         if opcao != '0':
-            print(f"{opcao}: {descricao} ({siglas_moedas[descricao]})")
+            print(f"{' ' * (shutil.get_terminal_size().columns - len(descricao))}[{opcao}]: {descricao} ({siglas_moedas[descricao]})")
         else:
-            print(f"{opcao}: {descricao}")
+            print(f"{' ' * (shutil.get_terminal_size().columns - len(descricao))}[{opcao}]: {descricao}")
 
-    escolha = input("Digite o número da opção desejada: ")
+    escolha = input("\nDigite o número da opção desejada: ")
 
     if escolha in moedas_disponiveis:
         if escolha == '0':
@@ -73,12 +92,17 @@ def escolher_moeda():
         else:
             return moedas_disponiveis[escolha]
     else:
-        print("Opção inválida. Escolha uma opção válida.")
+        print(f"{Cor.VERDE}Opção inválida. Escolha uma opção válida.{Cor.RESET}")
         return escolher_moeda()
 
 def calcular_juros():
     try:
         os.system('cls' if os.name == 'nt' else 'clear')  # Limpar terminal
+
+        print(f"\n{'=' * shutil.get_terminal_size().columns}")
+        print(f"{'Calculadora de Juros':^{shutil.get_terminal_size().columns}}")
+        print(f"{'=' * shutil.get_terminal_size().columns}\n")
+
         montante = float(input("Digite o montante do empréstimo: "))
         tempo_meses = int(input("Digite o tempo em meses: "))
         taxa_mensal = float(input("Digite a taxa de juros ao mês (em porcentagem): ")) / 100
@@ -86,21 +110,26 @@ def calcular_juros():
         montante_final = montante * (1 + taxa_mensal) ** tempo_meses
 
         print(f"\nMontante final a ser pago: {montante_final:.2f}")
+        print(f"{'=' * shutil.get_terminal_size().columns}\n")
+
     except ValueError:
-        print("Por favor, insira valores válidos.")
+        print(f"{Cor.VERDE}Erro:{Cor.RESET} Por favor, insira valores válidos.")
     except Exception as e:
-        print(f"Erro: {e}")
+        print(f"{Cor.VERDE}Erro:{Cor.RESET} {e}")
 
 def main():
     while True:
         os.system('cls' if os.name == 'nt' else 'clear')  # Limpar terminal
-        print("\nBem-vindo ao Finance!")
-        print("Escolha uma opção:")
-        print("1. Converter reais para moeda estrangeira")
-        print("2. Calculadora de Juros")
-        print("3. Sair")
 
-        opcao = input("Digite o número da opção desejada: ")
+        print(f"\n{'=' * shutil.get_terminal_size().columns}")
+        print(f"{'Bem-vindo ao Finance!':^{shutil.get_terminal_size().columns}}")
+        print(f"{'=' * shutil.get_terminal_size().columns}\n")
+
+        print(f"{' ' * 32}[1]: Converter reais para moeda estrangeira{' ' * 15}")
+        print(f"{' ' * 32}[2]: Calculadora de Juros{' ' * 37}")
+        print(f"{' ' * 32}[3]: Sair{' ' * (shutil.get_terminal_size().columns - 49)}")
+
+        opcao = input("\nDigite o número da opção desejada: ")
 
         if opcao == '1':
             moeda_escolhida = escolher_moeda()
@@ -116,7 +145,7 @@ def main():
             break
 
         else:
-            print("Opção inválida. Escolha uma opção válida.")
+            print(f"{Cor.VERDE}Opção inválida. Escolha uma opção válida.{Cor.RESET}")
 
         if opcao in ['1', '2']:
             input("Pressione Enter para continuar...")  # Espera por um input para continuar
