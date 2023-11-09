@@ -28,14 +28,25 @@ def obter_cotacao(moeda):
 
     api_url = f"https://olinda.bcb.gov.br/olinda/servico/PTAX/versao/v1/odata/CotacaoMoedaPeriodo(moeda=@moeda,dataInicial=@dataInicial,dataFinalCotacao=@dataFinalCotacao)?@moeda='{moeda}'&@dataInicial='10-05-2023'&@dataFinalCotacao='{current_date_str}'&$top=100&$format=json&$select=cotacaoCompra"
 
-    response = requests.get(api_url)
-    response.raise_for_status()
+    try:
+        response = requests.get(api_url)
+        response.raise_for_status()
 
-    json_data = response.json()
+        json_data = response.json()
 
-    first_cotacao_compra = json_data['value'][0]['cotacaoCompra']
+        if 'value' in json_data and json_data['value']:
+            first_cotacao_compra = json_data['value'][0]['cotacaoCompra']
+            return first_cotacao_compra
+        else:
+            print(f"{Cor.VERDE}Erro:{Cor.RESET} Não foi possível obter a cotação para a moeda {moeda}. Resposta da API: {json_data}")
 
-    return first_cotacao_compra
+    except requests.exceptions.HTTPError as http_err:
+        print(f"{Cor.VERDE}Erro:{Cor.RESET} Ocorreu um erro HTTP: {http_err}")
+    except Exception as e:
+        print(f"{Cor.VERDE}Erro:{Cor.RESET} {e}")
+
+    return None
+
 
 
 def converter_reais_para_moeda(valor_reais, cotacao, moeda_escolhida):
@@ -55,6 +66,7 @@ def converter_reais_para_moeda(valor_reais, cotacao, moeda_escolhida):
         print(f"Valor em Reais: {valor_em_reais:.2f} BRL")
         print(f"Valor Convertido: {valor_convertido:.2f} {moeda_escolhida}")
         print(f"{'=' * 80}\n")
+        input("Pressione Enter para continuar...")
 
     except ValueError:
         print(f"{Cor.VERDE}Erro:{Cor.RESET} Por favor, insira um valor válido em reais.")
@@ -91,12 +103,17 @@ def escolher_moeda():
 
     escolha = input("\nDigite o número da opção desejada: ")
 
-    if escolha in moedas_disponiveis:
-        return moedas_disponiveis[escolha]
+    if escolha == '0':
+        return None
+    elif escolha in moedas_disponiveis:
+        moeda_escolhida = moedas_disponiveis[escolha]
+        if moeda_escolhida != 'Retornar ao menu principal':
+            return moeda_escolhida
+        else:
+            return None
     else:
         print(f"{Cor.VERDE}Opção inválida. Escolha uma opção válida.{Cor.RESET}")
         return escolher_moeda()
-
 
 def calcular_juros():
     try:
@@ -183,6 +200,135 @@ def investimentos():
     except Exception as e:
         print(f"{Cor.VERDE}Erro:{Cor.RESET} {e}")
 
+acoes_disponiveis = {
+    '1': 'VALE3',
+    '2': 'PETR4',
+    '3': 'ITUB4',
+    '4': 'BBDC4',
+    '5': 'B3SA3',
+    '6': 'MGLU3',
+    '7': 'HAPV3',
+    '8': 'CVCB3',
+    '9': 'CIEL3',
+    '10': 'ABEV3',
+}
+
+nomes_completos = {
+    'VALE3': 'Vale SA',
+    'PETR4': 'Petrobras',
+    'ITUB4': 'Itaú Unibanco',
+    'BBDC4': 'Banco Bradesco',
+    'B3SA3': 'B3 SA - Brasil, Bolsa, Balcão',
+    'MGLU3': 'Magazine Luiza',
+    'HAPV3': 'Hapvida',
+    'CVCB3': 'CVC Brasil Operadora e Agência de Viagens',
+    'CIEL3': 'Cielo',
+    'ABEV3': 'Ambev',
+}
+
+
+dados_acoes = {}
+
+TOKEN_AUTENTICACAO = 'oLfPSSfjC6na61bAF3cgZj'
+
+params = {
+    'interval': '1d',
+    'token': TOKEN_AUTENTICACAO,
+}
+
+def limpar_tela():
+    os.system('cls' if os.name == 'nt' else 'clear')
+
+def obter_cotacao_acao(acao):
+
+    url = f"https://brapi.dev/api/quote/{acao}"
+    response = requests.get(url, params=params)
+
+    if response.status_code == 200:
+        try:
+            data = response.json()
+            resultados = data.get('results', [])
+            if resultados:
+                resultado = resultados[0]
+                cotacao = resultado.get('regularMarketPrice')
+                if cotacao is not None:
+                    dados_acoes[acao] = {
+                        'regularMarketPrice': cotacao,
+                        'longName': resultado.get('longName', 'Nome não disponível'),
+                        'regularMarketTime': resultado.get('regularMarketTime', 'Horário não disponível'),
+                        'symbol': resultado.get('symbol', 'Símbolo não disponível'),
+                        'logoUrl': resultado.get('logourl', 'URL do logo não disponível'),
+                    }
+                    return cotacao
+                else:
+                    print(f"{Cor.VERDE}Erro:{Cor.RESET} 'regularMarketPrice' não encontrado na resposta da API.")
+                    print(f"Resposta da API: {data}")
+                    return None
+            else:
+                print(f"{Cor.VERDE}Erro:{Cor.RESET} 'results' não encontrado na resposta da API.")
+                print(f"Resposta da API: {data}")
+                return None
+        except KeyError as e:
+            print(f"{Cor.VERDE}Erro:{Cor.RESET} A chave '{e}' não foi encontrada na resposta da API.")
+            print(f"Resposta da API: {data}")
+            return None
+    else:
+        print(f"{Cor.VERDE}Erro:{Cor.RESET} Não foi possível obter a cotação da ação {acao}.")
+        print(f"Resposta da API: {response.text}")
+        return None
+
+def exibir_cotacao_acao(acao, cotacao):
+    limpar_tela()
+    print(f"\n{'=' * 80}")
+    print(f"{'Cotação de Ação':^80}")
+    print(f"{'=' * 80}\n")
+
+    if acao in dados_acoes:
+        dados = dados_acoes[acao]
+        print(f"Ação: {acao}")
+        print(f"Cotação: {cotacao}")
+        print(f"Nome: {dados.get('longName', 'Nome não disponível')}")
+        print(f"Horário: {dados.get('regularMarketTime', 'Horário não disponível')}")
+        print(f"Símbolo: {dados.get('symbol', 'Símbolo não disponível')}")
+        input(f"Pressione Enter para continuar...")
+    else:
+        print(f"{Cor.VERDE}Erro:{Cor.RESET} Dados da ação {acao} não encontrados.")
+
+    print(f"\n{'=' * 80}\n")
+
+def escolher_acao():
+    acoes_disponiveis['0'] = 'Retornar ao menu principal'
+
+    print(f"\n{'=' * 80}")
+    print(f"{'Escolha a Ação para Consultar':^80}")
+    print(f"{'=' * 80}\n")
+
+    for opcao, sigla in acoes_disponiveis.items():
+        nome_completo = nomes_completos.get(sigla, sigla)  # Use get para evitar KeyError
+        print(f"{' ' * 1}[{opcao}]: {nome_completo}")
+
+    escolha = input("\nDigite o número da ação desejada: ")
+
+    if escolha == '0':
+        return 'Retornar ao menu principal'
+    elif escolha in acoes_disponiveis:
+        return acoes_disponiveis[escolha]
+    else:
+        print(f"{Cor.VERDE}Opção inválida. Escolha uma opção válida.{Cor.RESET}")
+        return escolher_acao()
+
+def bolsa_de_valores():
+    while True:
+        limpar_tela()
+        acao_escolhida = escolher_acao()
+
+        if acao_escolhida == 'Retornar ao menu principal':
+            return
+
+        cotacao_acao = obter_cotacao_acao(acao_escolhida)
+
+        if cotacao_acao is not None:
+            exibir_cotacao_acao(acao_escolhida, cotacao_acao)
 
 def sair():
     print("Obrigado por usar o Finance")
@@ -200,7 +346,8 @@ def main():
         print(f"{' ' * 1}[1]: Converter reais para moeda estrangeira{' ' * 15}")
         print(f"{' ' * 1}[2]: Calculadora de Juros{' ' * 38}")
         print(f"{' ' * 1}[3]: Investimentos{' ' * 41}")
-        print(f"{' ' * 1}[4]: Sair{' ' * 65}")
+        print(f"{' ' * 1}[4]: Bolsa de Valores{' ' * 47}")
+        print(f"{' ' * 1}[5]: Sair{' ' * 65}")
 
         opcao = input("\nDigite o número da opção desejada: ")
 
@@ -208,7 +355,8 @@ def main():
             moeda_escolhida = escolher_moeda()
             if moeda_escolhida is not None:
                 cotacao_atual = obter_cotacao(moeda_escolhida)
-                converter_reais_para_moeda(0, cotacao_atual, moeda_escolhida)
+                if cotacao_atual is not None:
+                    converter_reais_para_moeda(0, cotacao_atual, moeda_escolhida)
 
         elif opcao == '2':
             calcular_juros()
@@ -217,14 +365,16 @@ def main():
             investimentos()
 
         elif opcao == '4':
+            bolsa_de_valores()
+
+        elif opcao == '5':
             sair()
             break
 
         else:
             print(f"{Cor.VERDE}Opção inválida. Escolha uma opção válida.{Cor.RESET}")
 
-        if opcao in ['1', '2']:
-            input("Pressione Enter para continuar...")
+
 
 
 if __name__ == "__main__":
