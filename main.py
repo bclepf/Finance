@@ -129,8 +129,9 @@ def calcular_juros():
 
         montante_final = montante * (1 + taxa_mensal) ** tempo_meses
 
-        print(f"\nMontante final a ser pago: {montante_final:.2f}")
+        print(f"\nMontante final a ser pago: R$ {montante_final:.2f}")
         print(f"{'=' * 80}\n")
+        input(f"Pressione Enter para continuar...")
 
     except ValueError:
         print(f"{Cor.VERDE}Erro:{Cor.RESET} Por favor, insira valores válidos.")
@@ -286,7 +287,7 @@ def exibir_cotacao_acao(acao, cotacao):
     if acao in dados_acoes:
         dados = dados_acoes[acao]
         print(f"Ação: {acao}")
-        print(f"Cotação: {cotacao}")
+        print(f"Cotação Atual: R$ {cotacao}")
         print(f"Nome: {dados.get('longName', 'Nome não disponível')}")
         print(f"Horário: {dados.get('regularMarketTime', 'Horário não disponível')}")
         print(f"Símbolo: {dados.get('symbol', 'Símbolo não disponível')}")
