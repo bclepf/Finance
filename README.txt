@@ -29,7 +29,7 @@ Para utilizar o programa, certifique-se de:
    - Ou baixe como um arquivo ZIP, disponível no mesmo link para clonagem, e extraia-o.
 
 6. **Compile o programa em seu sistema:**
-    - Utilize o seguinte comando "pyinstaller --onefile main.py"
+    - Certifique-se de estar na pasta que contém todo o projeto, em seguida utilize o seguinte comando "pyinstaller --onefile main.py"
 
 7. **Localize e execute o arquivo gerado::**
     - Dentro da pasta de seu projeto localize a pasta "dist", nela deve conter o arquivo "main.exe", então o execute e aproveite a experiência, caso não o encontre verifique em qual pasta seu pyinstaller aloca os arquivos compilados.
