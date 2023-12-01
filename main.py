@@ -125,7 +125,7 @@ def calcular_juros():
 
         montante = float(input("Digite o montante do empréstimo: "))
         tempo_meses = int(input("Digite o tempo em meses: "))
-        taxa_mensal = float(input("Digite a taxa de juros ao mês (em porcentagem): ")) / 100
+        taxa_mensal = float(input("Digite a taxa de juros ao mês (apenas algarismos): ")) / 100
 
         montante_final = montante * (1 + taxa_mensal) ** tempo_meses
 
@@ -305,7 +305,7 @@ def escolher_acao():
     print(f"{'=' * 80}\n")
 
     for opcao, sigla in acoes_disponiveis.items():
-        nome_completo = nomes_completos.get(sigla, sigla)  # Use get para evitar KeyError
+        nome_completo = nomes_completos.get(sigla, sigla)
         print(f"{' ' * 1}[{opcao}]: {nome_completo}")
 
     escolha = input("\nDigite o número da ação desejada: ")
