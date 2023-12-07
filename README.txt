@@ -5,6 +5,9 @@ Para utilizar o programa, certifique-se de:
 1. **Possuir sempre a Versão mais recente:**
    - Baixe a versão compilada mais recente do Finance
 
+2. **Ter atenção ao inserir valores numéricos:**
+    - Ao inserir valores com casas decimais utilize ponto ao invés de vírgula, exemplo: 43.86
+
 
 
 **Em caso de não conseguir utilizar o executável siga os seguinstes passos:**
@@ -29,7 +32,7 @@ Para utilizar o programa, certifique-se de:
    - Ou baixe como um arquivo ZIP, disponível no mesmo link para clonagem, e extraia-o.
 
 6. **Compile o programa em seu sistema:**
-    - Certifique-se de estar na pasta que contém todo o projeto, em seguida utilize o seguinte comando "pyinstaller --onefile main.py"
+    - Certifique-se de estar na pasta que contém todo o projeto, em seguida utilize o seguinte comando no terminal de comando: "pyinstaller --onefile main.py"
 
 7. **Localize e execute o arquivo gerado::**
     - Dentro da pasta de seu projeto localize a pasta "dist", nela deve conter o arquivo "main.exe", então o execute e aproveite a experiência, caso não o encontre verifique em qual pasta seu pyinstaller aloca os arquivos compilados.
